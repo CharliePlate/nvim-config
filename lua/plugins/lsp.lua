@@ -35,7 +35,6 @@ return {
 			end
 
 			local mason = require("mason-lspconfig")
-			local cmp = require("cmp")
 			mason.setup()
 			mason.setup_handlers({
 				function(server_name)
