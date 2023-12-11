@@ -11,8 +11,12 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+local Util = require("util")
+
 require("config.settings")
 require("config.autocmds")
 require("config.keymaps.keymaps")
+
+Util.lazy()
 
 require("lazy").setup({ { import = "plugins" } })

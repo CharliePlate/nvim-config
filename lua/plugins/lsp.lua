@@ -17,7 +17,7 @@ return {
 			{ "williamboman/mason-lspconfig.nvim" },
 			{ "folke/neodev.nvim", opts = {} },
 		},
-		event = { "BufReadPost", "BufNewFile", "BufWritePre" },
+		event = "LazyFile",
 		config = function()
 			On_Attach(function(client, buffer)
 				require("config.keymaps.lsp").set_binds(client, buffer)
@@ -30,7 +30,7 @@ return {
 				local client_id = ctx.client_id
 				local client = vim.lsp.get_client_by_id(client_id)
 				local buffer = vim.api.nvim_get_current_buf()
-				require("lazyvim.plugins.lsp.keymaps").on_attach(client, buffer)
+				require("config.keymaps.lsp").set_binds(client, buffer)
 				return ret
 			end
 
@@ -42,73 +42,15 @@ return {
 				end,
 			})
 		end,
+		keys = {
+			{ "<leader>li", "<cmd>Mason<cr>", "Mason" },
+			{ "<leader>lI", "<cmd>LspInfo<cr>", "Lsp Info" },
+			{ "<leader>lR", "<cmd>LspRoot<cr>", "Lsp Root" },
+		},
 	},
 	{
-		"hrsh7th/nvim-cmp",
-		dependencies = {
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-buffer",
-			"FelipeLema/cmp-async-path",
-			"hrsh7th/cmp-cmdline",
-			"L3MON4D3/LuaSnip",
-			"saadparwaiz1/cmp_luasnip",
-		},
-
-		opts = function()
-			local cmp = require("cmp")
-			return {
-				snippet = {
-					-- REQUIRED - you must specify a snippet engine
-					expand = function(args)
-						require("luasnip").lsp_expand(args.body)
-					end,
-				},
-				window = {
-					completion = cmp.config.window.bordered(),
-					documentation = cmp.config.window.bordered(),
-				},
-				sources = cmp.config.sources({
-					{ name = "nvim_lsp" },
-					{ name = "luasnip" },
-					{ name = "buffer" },
-					{ name = "async_path" },
-				}),
-				mapping = cmp.mapping.preset.insert({
-					["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-					["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
-					["<C-b>"] = cmp.mapping.scroll_docs(-4),
-					["<C-f>"] = cmp.mapping.scroll_docs(4),
-					["<C-Space>"] = cmp.mapping.complete(),
-					["<C-e>"] = cmp.mapping.abort(),
-					["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-					["<S-CR>"] = cmp.mapping.confirm({
-						behavior = cmp.ConfirmBehavior.Replace,
-						select = true,
-					}), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-					["<C-CR>"] = function(fallback)
-						cmp.abort()
-						fallback()
-					end,
-				}),
-			}
-		end,
-		init = function()
-			local cmp = require("cmp")
-			cmp.setup.cmdline({ "/", "?" }, {
-				mapping = cmp.mapping.preset.cmdline(),
-				sources = {
-					{ name = "buffer" },
-				},
-			})
-
-			cmp.setup.cmdline(":", {
-				mapping = cmp.mapping.preset.cmdline(),
-				sources = cmp.config.sources({
-					{ name = "path" },
-				}, {
-					{ name = "cmdline" },
-				}),
-			})
-		end,
+		"smjonas/inc-rename.nvim",
+		cmd = "IncRename",
+		opts = {},
 	},
 }

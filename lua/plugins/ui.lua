@@ -49,12 +49,11 @@ return {
 		},
 		dependencies = {
 			"MunifTanjim/nui.nvim",
-			"smjonas/inc-rename.nvim",
 		},
 	},
 	{
 		"lukas-reineke/indent-blankline.nvim",
-		event = { "BufReadPost", "BufNewFile", "BufWritePre" },
+		event = "LazyFile",
 		opts = {
 			indent = {
 				char = "│",
@@ -82,7 +81,7 @@ return {
 	{
 		"echasnovski/mini.indentscope",
 		version = false,
-		event = { "BufReadPost", "BufNewFile", "BufWritePre" },
+		event = "LazyFile",
 		opts = {
 			-- symbol = "▏",
 			symbol = "│",
@@ -108,5 +107,61 @@ return {
 				end,
 			})
 		end,
+	},
+	{
+		"nvim-lualine/lualine.nvim",
+		opts = {
+			sections = require("util.lualine"),
+		},
+	},
+	{
+		"nvimdev/dashboard-nvim",
+		event = "VimEnter",
+		config = function()
+			local icon = {
+				[[]],
+				[[]],
+				[[]],
+				[[]],
+				[[]],
+				[[ ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ]],
+				[[ ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ]],
+				[[ ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ]],
+				[[ ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ]],
+				[[ ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ]],
+				[[ ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ]],
+				[[]],
+				[[]],
+			}
+
+			require("dashboard").setup({
+				theme = "doom",
+				hide = {
+					statusline = false,
+				},
+				config = {
+					header = icon,
+          -- stylua: ignore
+          center = {
+            { action = "Telescope find_files",                                                    desc = " Find file",       icon = " ", key = "f" },
+            { action = "ene | startinsert",                                                       desc = " New file",        icon = " ", key = "n" },
+            { action = "Telescope oldfiles",                                                      desc = " Recent files",    icon = " ", key = "r" },
+            { action = "Telescope live_grep",                                                     desc = " Find text",       icon = " ", key = "g" },
+            { action = "require('telescope.builtin').find_files({cwd=vim.fn.stdpath('config')})", desc = " Config",          icon = " ", key = "c" },
+            { action = 'lua require("persistence").load()',                                       desc = " Restore Session", icon = " ", key = "s" },
+            { action = "Lazy",                                                                    desc = " Lazy",            icon = "󰒲 ", key = "l" },
+            { action = "qa",                                                                      desc = " Quit",            icon = " ", key = "q" },
+          },
+					footer = function()
+						local stats = require("lazy").stats()
+						local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+						return {
+							"⚡ Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms",
+						}
+					end,
+				},
+			})
+		end,
+		dependencies = { { "nvim-tree/nvim-web-devicons" } },
 	},
 }

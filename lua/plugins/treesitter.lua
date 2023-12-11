@@ -19,12 +19,20 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
-		event = "VeryLazy",
+		event = { "LazyFile", "VeryLazy" },
+		init = function(plugin)
+			require("lazy.core.loader").add_to_rtp(plugin)
+			require("nvim-treesitter.query_predicates")
+		end,
 		dependencies = {
 			"timakro/vim-yadi",
 			"HiPhish/nvim-ts-rainbow2",
 			"windwp/nvim-ts-autotag",
+			"nvim-treesitter/nvim-treesitter-textobjects",
 		},
+		config = function(_, opts)
+			require("nvim-treesitter.configs").setup(opts)
+		end,
 		opts = {
 			auto_install = true,
 			context_commentstring = {

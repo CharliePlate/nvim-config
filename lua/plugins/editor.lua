@@ -41,12 +41,32 @@ return {
 				end,
 			},
 		},
+		opts = function()
+			return {
+				pickers = {
+					buffers = {
+						show_all_buffers = true,
+						sort_lastused = true,
+						previewer = false,
+						mappings = {
+							i = {
+								["<c-d>"] = "delete_buffer",
+							},
+							n = {
+								["d"] = "delete_buffer",
+							},
+						},
+					},
+				},
+			}
+		end,
     -- stylua: ignore
 		keys = {
-			{ "<leader>ff", function() require('telescope.builtin').find_files() end, desc = "Find Files (Root)" },
-      { "<leader>fF", function() require('telescope.builtin').find_files({cwd=Util.root()}) end, desc = "Find Files (LSP)"},
-      { "<leader>fg", function() require('telescope.builtin').live_grep() end, desc = "Grep (Root)" },
-      { "<leader>fG", function() require('telescope.builtin').live_grep({cwd=Util.root()}) end, desc = "Grep (LSP)"}
+      { "<leader>ff", function() require('telescope.builtin').find_files({cwd=Util.root()}) end, desc = "Find Files (LSP)"},
+			{ "<leader>fF", function() require('telescope.builtin').find_files() end, desc = "Find Files (Root)" },
+      { "<leader>fg", function() require('telescope.builtin').live_grep({cwd=Util.root()}) end, desc = "Grep (LSP)"},
+      { "<leader>fG", function() require('telescope.builtin').live_grep() end, desc = "Grep (Root)" },
+      { "<leader>fb", function() require('telescope.builtin').buffers() end, desc = "Buffers"}
 		},
 	},
 	{
@@ -79,6 +99,37 @@ return {
 			{ "<c-j>", function() require("harpoon"):list():select(2) end, desc = "harpoon to file 2" },
 			{ "<c-k>", function() require("harpoon"):list():select(3) end, desc = "harpoon to file 3" },
 			{ "<c-l>", function() require("harpoon"):list():select(4) end, desc = "harpoon to file 4" },
+		},
+	},
+	{
+		{
+			"akinsho/toggleterm.nvim",
+			version = "*",
+			keys = {
+				{ [[<c-\>]], "<cmd>ToggleTerm<cr>", desc = "ToggleTerm" },
+			},
+			opts = {
+				size = 20,
+				open_mapping = [[<c-\>]],
+				hide_numbers = true,
+				shade_filetypes = {},
+				shade_terminals = true,
+				shading_factor = 2,
+				start_in_insert = true,
+				insert_mappings = true,
+				persist_size = true,
+				direction = "float",
+				close_on_exit = true,
+				shell = vim.o.shell,
+				float_opts = {
+					border = "curved",
+					winblend = 0,
+					highlights = {
+						border = "Normal",
+						background = "Normal",
+					},
+				},
+			},
 		},
 	},
 }

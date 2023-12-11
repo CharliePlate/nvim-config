@@ -19,13 +19,16 @@ opt.fillchars = {
 }
 opt.wrap = false -- Disable line wrap
 opt.undodir = vim.fn.expand("~/.cache/vim/undodir")
+opt.undofile = true
 opt.pumblend = 0
+opt.pumheight = 10
 opt.eol = true
 opt.grepformat = "%f:%l:%c:%m"
 opt.listchars = "tab:│ ,trail:·,extends:»,precedes:«,nbsp:␣"
 opt.numberwidth = 3
 opt.relativenumber = true
 opt.statuscolumn = "%=%{v:relnum?v:relnum:v:lnum} %s"
+opt.ignorecase = true
 
 vim.diagnostic.config({
 	float = { border = "rounded" },
