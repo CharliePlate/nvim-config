@@ -8,6 +8,8 @@ return {
 				javascript = { { "prettierd" } },
 				typescriptreact = { { "prettierd" } },
 				javascriptreact = { { "prettierd" } },
+				json = { { "prettierd" } },
+				go = { "goimports", "gofumpt" },
 			},
 			format_on_save = {
 				timeout_ms = 500,

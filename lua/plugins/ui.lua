@@ -8,6 +8,13 @@ return {
 			vim.cmd.colorscheme("rose-pine")
 		end,
 	},
+	-- {
+	-- 	"rebelot/kanagawa.nvim",
+	-- 	priority = 1000,
+	-- 	init = function()
+	-- 		vim.cmd.colorscheme("kanagawa")
+	-- 	end,
+	-- },
 	{
 		"stevearc/dressing.nvim",
 		lazy = true,
@@ -163,5 +170,18 @@ return {
 			})
 		end,
 		dependencies = { { "nvim-tree/nvim-web-devicons" } },
+	},
+	{
+		"RRethy/vim-illuminate",
+		opts = {
+			delay = 200,
+			large_file_cutoff = 2000,
+			large_file_overrides = {
+				providers = { "lsp" },
+			},
+		},
+		config = function(_, opts)
+			require("illuminate").configure(opts)
+		end,
 	},
 }
