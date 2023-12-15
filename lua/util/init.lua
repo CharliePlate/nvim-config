@@ -1,9 +1,8 @@
-local M = {}
-
-M.root = require("util.root")
-M.icons = require("util.icons")
-M.lualine = require("util.lualine")
-M.lazy = require("util.lazy")
-M.lang = require("util.lang")
-
-return M
+return {
+	root = require("util.root"),
+	icons = require("util.icons"),
+	lualine = require("util.lualine"),
+	lazy = require("util.lazy"),
+	lang = require("util.lang"),
+	env = require("util.env"),
+}

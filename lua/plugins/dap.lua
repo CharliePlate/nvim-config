@@ -116,7 +116,7 @@ return {
 				},
 			}
 
-			local GRAPHITE_DIR = "/Users/charlieplate/Documents/work/graphite" .. ".*"
+			local GRAPHITE_DIR = vim.g.nvim_work_dir .. ".*"
 
 			if string.match(vim.fn.getcwd(), GRAPHITE_DIR) then
 				local sorted_ports = {}

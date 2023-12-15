@@ -16,6 +16,7 @@ local Util = require("util")
 require("config.settings")
 require("config.autocmds")
 require("config.keymaps.keymaps")
+require("config.env")
 
 Util.lazy()
 
