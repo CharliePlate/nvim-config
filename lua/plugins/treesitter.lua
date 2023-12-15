@@ -34,6 +34,7 @@ return {
 			require("nvim-treesitter.configs").setup(opts)
 		end,
 		opts = {
+			ensure_installed = { "lua" },
 			auto_install = true,
 			context_commentstring = {
 				enable = true,

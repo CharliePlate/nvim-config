@@ -15,15 +15,11 @@ return {
 		dependencies = {
 			{ "williamboman/mason.nvim", opts = {} },
 			{ "williamboman/mason-lspconfig.nvim" },
-			{ "folke/neodev.nvim", opts = {} },
 		},
 		event = "LazyFile",
 		opts = {
-			servers = {
-				jsonls = require("config.lsp.jsonls"),
-				gopls = require("config.lsp.gopls"),
-			},
-			inlayHints = false,
+			servers = {},
+			inlayHints = {},
 		},
 		config = function(_, opts)
 			On_Attach(function(client, buffer)
@@ -47,17 +43,16 @@ return {
 			end
 
 			On_Attach(function(client, buffer)
-				if client.supports_method("textDocument/inlayHint") and opts.inlayHints then
-					vim.lsp.inlay_hint.enable(buffer, true)
+				if opts.inlayHints[client.name] then
+					if client.supports_method("textDocument/inlayHint") then
+						vim.lsp.inlay_hint.enable(buffer, true)
+					end
 				end
 			end)
 
 			local mason = require("mason-lspconfig")
-			mason.setup({
-				ensure_installed = { "lua_ls", "tsserver", "jsonls", "gopls" },
-			})
-			mason.setup_handlers({
 
+			mason.setup_handlers({
 				function(server_name)
 					require("lspconfig")[server_name].setup({})
 				end,
@@ -72,6 +67,44 @@ return {
 			{ "<leader>lI", "<cmd>LspInfo<cr>", "Lsp Info" },
 			{ "<leader>lR", "<cmd>LspRoot<cr>", "Lsp Root" },
 		},
+	},
+	{
+
+		"williamboman/mason.nvim",
+		cmd = "Mason",
+		keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
+		build = ":MasonUpdate",
+		opts = {
+			ensure_installed = {
+				"stylua",
+			},
+		},
+		config = function(_, opts)
+			require("mason").setup(opts)
+			local mr = require("mason-registry")
+			mr:on("package:install:success", function()
+				vim.defer_fn(function()
+					-- trigger FileType event to possibly load this newly installed LSP server
+					require("lazy.core.handler.event").trigger({
+						event = "FileType",
+						buf = vim.api.nvim_get_current_buf(),
+					})
+				end, 100)
+			end)
+			local function ensure_installed()
+				for _, tool in ipairs(opts.ensure_installed) do
+					local p = mr.get_package(tool)
+					if not p:is_installed() then
+						p:install()
+					end
+				end
+			end
+			if mr.refresh then
+				mr.refresh(ensure_installed)
+			else
+				ensure_installed()
+			end
+		end,
 	},
 	{
 		"smjonas/inc-rename.nvim",

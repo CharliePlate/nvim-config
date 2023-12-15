@@ -7,23 +7,25 @@ return {
 		opts = {},
 	},
 	{
-		"stevearc/oil.nvim",
-		dependencies = { "nvim-tree/nvim-web-devicons" },
-		lazy = false,
+		"echasnovski/mini.files",
+		version = "*",
 		opts = {
-			win_options = {
-				signcolumn = "no",
-				statuscolumn = "",
-				foldcolumn = "0",
-				spell = false,
-				list = false,
-				conceallevel = 3,
-				relativenumber = false,
+			mappings = {
+				close = "q",
+				go_in = "l",
+				go_in_plus = "<cr>",
+				go_out = "-",
+				go_out_plus = "H",
+				reset = "<BS>",
+				reveal_cwd = "@",
+				show_help = "g?",
+				synchronize = "=",
+				trim_left = "<",
+				trim_right = ">",
 			},
-			default_file_explorer = true,
 		},
 		keys = {
-			{ "-", "<cmd>Oil<cr>" },
+			{ "-", "<cmd>lua MiniFiles.open()<cr>" },
 		},
 	},
 	{

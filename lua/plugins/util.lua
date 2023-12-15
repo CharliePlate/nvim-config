@@ -37,9 +37,4 @@ return {
 			vim.g.startuptime_tries = 10
 		end,
 	},
-	{
-		"b0o/SchemaStore.nvim",
-		lazy = true,
-		version = false,
-	},
 }

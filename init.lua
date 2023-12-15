@@ -19,4 +19,9 @@ require("config.keymaps.keymaps")
 
 Util.lazy()
 
-require("lazy").setup({ { import = "plugins" } })
+require("lazy").setup({
+	spec = {
+		{ import = "plugins" },
+		{ import = "plugins.lang" },
+	},
+})
