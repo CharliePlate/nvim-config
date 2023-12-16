@@ -31,9 +31,9 @@ return {
 	},
 	{
 		"kdheepak/lazygit.nvim",
-		init = function()
-			vim.keymap.set("n", "<leader>gg", ":LazyGit<cr>", { desc = "LazyGit" })
-		end,
+		keys = {
+			{ "<leader>gg", "<cmd>LazyGit<cr>", desc = "LazyGit" },
+		},
 	},
 	{
 		"sindrets/diffview.nvim",

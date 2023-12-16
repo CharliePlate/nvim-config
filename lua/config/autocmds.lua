@@ -8,7 +8,7 @@ local set_root = function()
 	-- Get directory path to start search from
 	local path = vim.api.nvim_buf_get_name(0)
 	if path == "" then
-		return
+		path = vim.fn.getcwd()
 	end
 	path = vim.fs.dirname(path)
 
@@ -24,6 +24,10 @@ local set_root = function()
 	end
 
 	-- Set current directory
+	if vim.g.starting_root == nil then
+		vim.g.starting_root = root
+	end
+
 	vim.fn.chdir(root)
 end
 

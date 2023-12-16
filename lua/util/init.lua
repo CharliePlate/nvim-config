@@ -5,4 +5,5 @@ return {
 	lazy = require("util.lazy"),
 	lang = require("util.lang"),
 	env = require("util.env"),
+	dap = require("util.dap"),
 }

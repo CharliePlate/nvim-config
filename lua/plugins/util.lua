@@ -4,12 +4,12 @@ return {
 	{ "nvim-lua/plenary.nvim" },
 	{
 		"folke/persistence.nvim",
-		event = "BufReadPre",
+		lazy = true,
 		opts = {},
 		config = function(_, opts)
 			local persistance = require("persistence")
 			persistance.setup(opts)
-			if Util.root() ~= vim.g.starting_root then
+			if vim.fn.getcwd() ~= vim.g.starting_root then
 				persistance.stop()
 			end
 		end,

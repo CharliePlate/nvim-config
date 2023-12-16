@@ -75,15 +75,34 @@ return {
 		"folke/which-key.nvim",
 		lazy = false,
 		opts = {
-			["<leader>g"] = { name = "+git" },
-			["<leader>f"] = { name = "+find" },
-			["<leader>q"] = { name = "+session" },
+			keys = {
+				["<leader>g"] = { name = "+git" },
+				["<leader>f"] = { name = "+find" },
+				["<leader>q"] = { name = "+session" },
+			},
+			config = {
+				triggers_nowait = {
+					-- marks
+					"`",
+					"'",
+					"g`",
+					"g'",
+					-- registers
+					'"',
+					"<c-r>",
+					-- spelling
+					"z=",
+					"<c-k>",
+				},
+			},
 		},
 
 		config = function(_, opts)
 			local wk = require("which-key")
-			wk.setup(opts)
-			wk.register(opts)
+			wk.setup(opts.config)
+			wk.register(opts.keys)
+
+			vim.api.nvim_del_keymap("n", "<C-k>")
 		end,
 	},
 	{

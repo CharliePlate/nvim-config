@@ -125,8 +125,6 @@ end
 M.cache = {}
 
 function M.setup()
-	vim.g.starting_root = M.get()
-
 	vim.api.nvim_create_user_command("LspRoot", function()
 		print(M.get())
 	end, { desc = "Prints the LSP Root" })

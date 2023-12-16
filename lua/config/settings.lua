@@ -34,6 +34,8 @@ opt.grepformat = "%f:%l:%c:%m"
 opt.grepprg = "rg --vimgrep"
 opt.conceallevel = 3
 
+opt.completeopt = { "menuone", "noselect" }
+
 opt.signcolumn = "yes"
 opt.smartcase = true
 opt.smartindent = true
