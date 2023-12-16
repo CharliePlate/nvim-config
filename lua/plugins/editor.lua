@@ -79,7 +79,10 @@ return {
 				["<leader>g"] = { name = "+git" },
 				["<leader>f"] = { name = "+find" },
 				["<leader>q"] = { name = "+session" },
+				["<leader>d"] = { name = "debug", ["t"] = { name = "test" } },
+				["<leader>l"] = { name = "lsp" },
 			},
+
 			config = {
 				triggers_nowait = {
 					-- marks

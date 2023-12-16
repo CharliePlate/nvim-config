@@ -29,7 +29,7 @@ return Lang.makeSpec({
 					},
 				}
 			end
-			for _, language in ipairs({ "typescript", "javascript", "typescriptreact", "javascriptreact" }) do
+			for _, language in ipairs({ "typescript", "typescriptreact", "javascriptreact" }) do
 				if not dap.configurations[language] and not Dap.root_is_configured() then
 					dap.configurations[language] = {
 						{
@@ -37,21 +37,18 @@ return Lang.makeSpec({
 							request = "launch",
 							name = "Launch file",
 							program = "${file}",
-							cwd = "${workspaceFolder}",
-						},
-						{
-							type = "pwa-node",
-							request = "attach",
-							name = "Attach",
-							processId = require("dap.utils").pick_process,
-							cwd = "${workspaceFolder}",
+							cwd = vim.fn.getcwd(),
+							sourceMaps = true,
+							protocol = "inspector",
+							console = "integratedTerminal",
+							outFiles = { "${workspaceFolder}/dist/**/*.js" },
+							runtimeExecutable = "/Users/charlieplate/.yarn/bin/ts-node",
 						},
 					}
 				end
 			end
 		end,
 	},
-
 	{
 		"David-Kunz/jester",
 		opts = {
@@ -76,14 +73,27 @@ return Lang.makeSpec({
 				remoteRoot = "${workspaceFolder}/src",
 			},
 		},
-		filetypes = { "javascript", "typescript", "typescriptreact", "javascriptreact" },
-		keys = {
-			{ "<leader>t", desc = "Test" },
-			{ "<leader>dtd", "<cmd>lua require'jester'.debug()<cr>", desc = "Debug test" },
-			{ "<leader>dtr", "<cmd>lua require'jester'.run()<cr>", desc = "Run test" },
-			{ "<leader>dtf", "<cmd>lua require'jester'.run_file()<cr>", desc = "Run file" },
-			{ "<leader>dtD", "<cmd>lua require'jester'.debug_last()<cr>", desc = "Debug last" },
-			{ "<leader>dtR", "<cmd>lua require'jester'.run_last()<cr>", desc = "Run last" },
-		},
+		config = function(_, opts)
+			require("jester").setup(opts)
+			vim.api.nvim_set_keymap(
+				"n",
+				"<leader>dtd",
+				"<cmd>lua require'jester'.run_file()<cr>",
+				{ noremap = true, desc = "Debug test" }
+			)
+			vim.api.nvim_set_keymap(
+				"n",
+				"<leader>dtr",
+				"<cmd>lua require'jester'.run()<cr>",
+				{ noremap = true, desc = "Run test" }
+			)
+			vim.api.nvim_set_keymap(
+				"n",
+				"<leader>dtf",
+				"<cmd>lua require'jester'.run_file()<cr>",
+				{ noremap = true, desc = "Run file" }
+			)
+		end,
+		ft = { "javascript", "typescript", "typescriptreact", "javascriptreact" },
 	},
 })

@@ -80,23 +80,6 @@ return {
 		config = function()
 			local dap = require("dap")
 			Util.dap.load_if_configured()
-			-- just in case i need this later
-			-- local typescript = {
-			-- 	{
-			-- 		type = "pwa-node",
-			-- 		request = "launch",
-			-- 		name = "Launch file",
-			-- 		program = "${file}",
-			-- 		cwd = vim.fn.getcwd(),
-			-- 		sourceMaps = true,
-			-- 		protocol = "inspector",
-			-- 		console = "integratedTerminal",
-			-- 		outFiles = { "${workspaceFolder}/dist/**/*.js" },
-			-- 		runtimeExecutable = "/Users/charlieplate/.yarn/bin/ts-node",
-			-- 	},
-			-- }
-			--
-			-- dap.configurations.typescript = typescript
 			vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
 
 			for name, sign in pairs(Util.icons.dap) do
