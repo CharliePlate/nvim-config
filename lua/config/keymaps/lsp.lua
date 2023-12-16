@@ -13,13 +13,13 @@ M.keys = {
 }
 
 M.set_binds = function(_, buffer)
-	local opts = { noremap = true, silent = true }
-	local whichkey = require("which-key")
-	whichkey.register({ ["<leader>c"] = { name = "+coding" } }, { buffer = buffer })
-	for _, key in pairs(M.keys) do
-		vim.keymap.set(key.mode or "n", key[1], key[2], opts)
-		whichkey.register({ [key[1]] = { name = key["desc"] } }, { buffer = buffer })
-	end
+  local opts = { noremap = true, silent = true }
+  local whichkey = require("which-key")
+  whichkey.register({ ["<leader>c"] = { name = "+coding" } }, { buffer = buffer })
+  for _, key in pairs(M.keys) do
+    vim.keymap.set(key.mode or "n", key[1], key[2], opts)
+    whichkey.register({ [key[1]] = { name = key["desc"] } }, { buffer = buffer })
+  end
 end
 
 return M

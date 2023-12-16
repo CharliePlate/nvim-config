@@ -1,21 +1,21 @@
 local M = setmetatable({}, {
-	__call = function(m) end,
+  __call = function(m) end,
 })
 
 local function getRelativePath()
-	local path = vim.fn.expand("%:p")
-	return vim.fn.fnamemodify(path, ":.")
+  local path = vim.fn.expand("%:p")
+  return vim.fn.fnamemodify(path, ":.")
 end
 
 local icons = require("util.icons")
 
 return {
-	lualine_a = { "mode" },
-	lualine_b = { "branch" },
-	lualine_c = {
-		getRelativePath,
-	},
-	lualine_x = {
+  lualine_a = { "mode" },
+  lualine_b = { "branch" },
+  lualine_c = {
+    getRelativePath,
+  },
+  lualine_x = {
             -- stylua: ignore
             {
               function() return require("noice").api.status.command.get() end,
@@ -31,36 +31,36 @@ return {
               function() return "  " .. require("dap").status() end,
               cond = function () return package.loaded["dap"] and require("dap").status() ~= "" end,
             },
-		{
-			require("lazy.status").updates,
-			cond = require("lazy.status").has_updates,
-		},
-		{
-			"diff",
-			symbols = {
-				added = icons.git.added,
-				modified = icons.git.modified,
-				removed = icons.git.removed,
-			},
-			source = function()
-				local gitsigns = vim.b.gitsigns_status_dict
-				if gitsigns then
-					return {
-						added = gitsigns.added,
-						modified = gitsigns.changed,
-						removed = gitsigns.removed,
-					}
-				end
-			end,
-		},
-	},
-	lualine_y = {
-		{ "progress", separator = " ", padding = { left = 1, right = 0 } },
-		{ "location", padding = { left = 0, right = 1 } },
-	},
-	lualine_z = {
-		function()
-			return " " .. os.date("%R")
-		end,
-	},
+    {
+      require("lazy.status").updates,
+      cond = require("lazy.status").has_updates,
+    },
+    {
+      "diff",
+      symbols = {
+        added = icons.git.added,
+        modified = icons.git.modified,
+        removed = icons.git.removed,
+      },
+      source = function()
+        local gitsigns = vim.b.gitsigns_status_dict
+        if gitsigns then
+          return {
+            added = gitsigns.added,
+            modified = gitsigns.changed,
+            removed = gitsigns.removed,
+          }
+        end
+      end,
+    },
+  },
+  lualine_y = {
+    { "progress", separator = " ", padding = { left = 1, right = 0 } },
+    { "location", padding = { left = 0, right = 1 } },
+  },
+  lualine_z = {
+    function()
+      return " " .. os.date("%R")
+    end,
+  },
 }

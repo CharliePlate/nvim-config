@@ -1,21 +1,21 @@
 return {
-	{
-		"lewis6991/gitsigns.nvim",
-		opts = {
-			signs = {
-				add = { text = "▎" },
-				change = { text = "▎" },
-				delete = { text = "" },
-				topdelete = { text = "" },
-				changedelete = { text = "▎" },
-				untracked = { text = "▎" },
-			},
-			on_attach = function(buffer)
-				local gs = package.loaded.gitsigns
+  {
+    "lewis6991/gitsigns.nvim",
+    opts = {
+      signs = {
+        add = { text = "▎" },
+        change = { text = "▎" },
+        delete = { text = "" },
+        topdelete = { text = "" },
+        changedelete = { text = "▎" },
+        untracked = { text = "▎" },
+      },
+      on_attach = function(buffer)
+        local gs = package.loaded.gitsigns
 
-				local function map(mode, l, r, desc)
-					vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
-				end
+        local function map(mode, l, r, desc)
+          vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
+        end
 
       -- stylua: ignore start
       map("n", "]h", gs.next_hunk, "Next Hunk")
@@ -26,21 +26,21 @@ return {
       map("n", "<leader>gp", gs.preview_hunk, "Preview Hunk")
       map("n", "<leader>gl", function() gs.blame_line({ full = true }) end, "Blame Line")
       map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
-			end,
-		},
-	},
-	{
-		"kdheepak/lazygit.nvim",
-		keys = {
-			{ "<leader>gg", "<cmd>LazyGit<cr>", desc = "LazyGit" },
-		},
-	},
-	{
-		"sindrets/diffview.nvim",
-		keys = {
-			{ "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", desc = "File History" },
-			{ "<leader>gd", "<cmd>DiffviewOpen<cr>", desc = "Diff" },
-			{ "<leader>gD", "<cmd>DiffviewClose<cr>", desc = "Close Diffview" },
-		},
-	},
+      end,
+    },
+  },
+  {
+    "kdheepak/lazygit.nvim",
+    keys = {
+      { "<leader>gg", "<cmd>LazyGit<cr>", desc = "LazyGit" },
+    },
+  },
+  {
+    "sindrets/diffview.nvim",
+    keys = {
+      { "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", desc = "File History" },
+      { "<leader>gd", "<cmd>DiffviewOpen<cr>", desc = "Diff" },
+      { "<leader>gD", "<cmd>DiffviewClose<cr>", desc = "Close Diffview" },
+    },
+  },
 }

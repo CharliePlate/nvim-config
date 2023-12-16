@@ -1,61 +1,61 @@
 local Util = require("util")
 
 local function get_args(config)
-	local args = type(config.args) == "function" and (config.args() or {}) or config.args or {}
-	config = vim.deepcopy(config)
-	---@cast args string[]
-	config.args = function()
-		local new_args = vim.fn.input("Run with args: ", table.concat(args, " ")) --[[@as string]]
-		return vim.split(vim.fn.expand(new_args) --[[@as string]], " ")
-	end
-	return config
+  local args = type(config.args) == "function" and (config.args() or {}) or config.args or {}
+  config = vim.deepcopy(config)
+  ---@cast args string[]
+  config.args = function()
+    local new_args = vim.fn.input("Run with args: ", table.concat(args, " ")) --[[@as string]]
+    return vim.split(vim.fn.expand(new_args) --[[@as string]], " ")
+  end
+  return config
 end
 
 return {
-	{
-		"mfussenegger/nvim-dap",
+  {
+    "mfussenegger/nvim-dap",
 
-		dependencies = {
-			{
-				"rcarriga/nvim-dap-ui",
+    dependencies = {
+      {
+        "rcarriga/nvim-dap-ui",
       -- stylua: ignore
       keys = {
         { "<leader>du", function() require("dapui").toggle({ }) end, desc = "Dap UI" },
         { "<leader>de", function() require("dapui").eval() end, desc = "Eval", mode = {"n", "v"} },
       },
-				opts = {},
-				config = function(_, opts)
-					local dap = require("dap")
-					local dapui = require("dapui")
-					dapui.setup(opts)
-					dap.listeners.after.event_initialized["dapui_config"] = function()
-						dapui.open({})
-					end
-					dap.listeners.before.event_terminated["dapui_config"] = function()
-						dapui.close({})
-					end
-					dap.listeners.before.event_exited["dapui_config"] = function()
-						dapui.close({})
-					end
-				end,
-			},
+        opts = {},
+        config = function(_, opts)
+          local dap = require("dap")
+          local dapui = require("dapui")
+          dapui.setup(opts)
+          dap.listeners.after.event_initialized["dapui_config"] = function()
+            dapui.open({})
+          end
+          dap.listeners.before.event_terminated["dapui_config"] = function()
+            dapui.close({})
+          end
+          dap.listeners.before.event_exited["dapui_config"] = function()
+            dapui.close({})
+          end
+        end,
+      },
 
-			{
-				"theHamsta/nvim-dap-virtual-text",
-				opts = {},
-			},
+      {
+        "theHamsta/nvim-dap-virtual-text",
+        opts = {},
+      },
 
-			{
-				"jay-babu/mason-nvim-dap.nvim",
-				dependencies = "mason.nvim",
-				cmd = { "DapInstall", "DapUninstall" },
-				opts = {
-					automatic_installation = true,
-					handlers = {},
-					ensure_installed = {},
-				},
-			},
-		},
+      {
+        "jay-babu/mason-nvim-dap.nvim",
+        dependencies = "mason.nvim",
+        cmd = { "DapInstall", "DapUninstall" },
+        opts = {
+          automatic_installation = true,
+          handlers = {},
+          ensure_installed = {},
+        },
+      },
+    },
 
   -- stylua: ignore
   keys = {
@@ -77,18 +77,18 @@ return {
     { "<leader>dx", function() require("dap").disconnect() end, desc = "Terminate" },
     { "<leader>dw", function() require("dap.ui.widgets").hover() end, desc = "Widgets" },
   },
-		config = function()
-			local dap = require("dap")
-			Util.dap.load_if_configured()
-			vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
+    config = function()
+      local dap = require("dap")
+      Util.dap.load_if_configured()
+      vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
 
-			for name, sign in pairs(Util.icons.dap) do
-				sign = type(sign) == "table" and sign or { sign }
-				vim.fn.sign_define(
-					"Dap" .. name,
-					{ text = sign[1], texthl = sign[2] or "DiagnosticInfo", linehl = sign[3], numhl = sign[3] }
-				)
-			end
-		end,
-	},
+      for name, sign in pairs(Util.icons.dap) do
+        sign = type(sign) == "table" and sign or { sign }
+        vim.fn.sign_define(
+          "Dap" .. name,
+          { text = sign[1], texthl = sign[2] or "DiagnosticInfo", linehl = sign[3], numhl = sign[3] }
+        )
+      end
+    end,
+  },
 }
