@@ -18,7 +18,7 @@ local function on_tsserver_attach(client)
 end
 
 -- Create an autocommand group for the plugin
-local group = vim.api.nvim_create_augroup("MyPluginLsp", { clear = true })
+local group = vim.api.nvim_create_augroup("PrettyPrintErrors", { clear = true })
 
 -- Set up the LspAttach autocommand
 vim.api.nvim_create_autocmd("LspAttach", {

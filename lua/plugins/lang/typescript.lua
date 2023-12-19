@@ -123,9 +123,6 @@ return Lang.makeSpec({
   },
   {
     dependencies = { "neovim/nvim-lspconfig" },
-    init = function()
-      print(vim.inspect(vim.fn.stdpath("config") .. "/lua/dev/ts-pretty-errors"))
-    end,
     dir = vim.fn.stdpath("config") .. "/lua/dev/ts-pretty-errors",
   },
 })
