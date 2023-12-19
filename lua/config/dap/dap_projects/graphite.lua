@@ -21,6 +21,20 @@ for name, port in pairs(ports) do
     webRoot = "${workspaceFolder}/src",
     remoteRoot = "${workspaceFolder}/src",
   })
+
+  table.insert(configurations, {
+    lang = "jest",
+    type = "pwa-node",
+    request = "attach",
+    port = port,
+    name = "Attach to " .. name,
+    sourceMaps = true,
+    protocol = "inspector",
+    console = "integratedTerminal",
+    outFiles = { "${workspaceFolder}/dist/**/*.js" },
+    webRoot = "${workspaceFolder}/src",
+    remoteRoot = "${workspaceFolder}/src",
+  })
 end
 
 return configurations

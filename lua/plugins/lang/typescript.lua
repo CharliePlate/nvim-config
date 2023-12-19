@@ -10,6 +10,7 @@ return Lang.makeSpec({
     javascriptreact = { { "prettierd" } },
   }),
   Lang.addDap("js-debug-adapter"),
+  Lang.addTreesitterFiletypes({ "typescript", "javascript" }),
   {
     "mfussenegger/nvim-dap",
     opts = function()
@@ -95,5 +96,36 @@ return Lang.makeSpec({
       )
     end,
     ft = { "javascript", "typescript", "typescriptreact", "javascriptreact" },
+  },
+  {
+    "nvim-neotest/neotest",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "haydenmeade/neotest-jest",
+    },
+    opts = function(_, opts)
+      return {
+        adapters = vim.list_extend(opts.adapters, {
+          require("neotest-jest")({}),
+        }),
+      }
+    end,
+    -- stylua: ignore
+    keys = {
+      { "<leader>tt", function() require("neotest").run.run(vim.fn.expand("%")) end, desc = "Run File" },
+      { "<leader>tT", function() require("neotest").run.run(vim.loop.cwd()) end, desc = "Run All Test Files" },
+      { "<leader>tr", function() require("neotest").run.run() end, desc = "Run Nearest" },
+      { "<leader>ts", function() require("neotest").summary.toggle() end, desc = "Toggle Summary" },
+      { "<leader>to", function() require("neotest").output.open({ enter = true, auto_close = true }) end, desc = "Show Output" },
+      { "<leader>tO", function() require("neotest").output_panel.toggle() end, desc = "Toggle Output Panel" },
+      { "<leader>tS", function() require("neotest").run.stop() end, desc = "Stop" },
+    },
+  },
+  {
+    dependencies = { "neovim/nvim-lspconfig" },
+    init = function()
+      print(vim.inspect(vim.fn.stdpath("config") .. "/lua/dev/ts-pretty-errors"))
+    end,
+    dir = vim.fn.stdpath("config") .. "/lua/dev/ts-pretty-errors",
   },
 })

@@ -78,7 +78,7 @@ return {
       "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip",
     },
-    event = "InsertEnter",
+    event = { "InsertEnter", "CmdLineEnter" },
     opts = function()
       local cmp = require("cmp")
       local defaults = require("cmp.config.default")()

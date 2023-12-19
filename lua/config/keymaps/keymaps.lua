@@ -12,6 +12,11 @@ end
 
 map({ "n", "<esc>", ":noh<cr>" })
 
+map({ "v", "J", ":m '>+1<CR>gv=gv" })
+map({ "v", "K", ":m '<-2<CR>gv=gv" })
+map({ "v", ">", ">gv" })
+map({ "v", "<", "<gv" })
+
 -- Recenter after scrolling
 map({ "n", "<c-f>", "<c-f>zz" })
 map({ "n", "<c-d>", "<c-d>zz" })
