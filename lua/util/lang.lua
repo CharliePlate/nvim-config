@@ -18,8 +18,9 @@ M.makeSpec = function(t)
 end
 
 ---@param formatter table<string, table<table<string>>> | table<string>
+---@param install boolean?
 ---@return table
-M.addFormatter = function(formatter)
+M.addFormatter = function(formatter, install)
   return {
     {
       "stevearc/conform.nvim",
@@ -31,23 +32,25 @@ M.addFormatter = function(formatter)
       "williamboman/mason.nvim",
       opts = function(_, opts)
         opts.ensure_installed = opts.ensure_installed or {}
-        for _, value in pairs(formatter) do
-          if fn.isTableOfTables(value) then
-            for _, v in ipairs(value) do
+        if install == nil or install then
+          for _, value in pairs(formatter) do
+            if fn.isTableOfTables(value) then
+              for _, v in ipairs(value) do
+                vim.list_extend(
+                  opts.ensure_installed,
+                  fn.filter(v, function(f)
+                    return not vim.tbl_contains(opts.ensure_installed, f)
+                  end)
+                )
+              end
+            else
               vim.list_extend(
                 opts.ensure_installed,
-                fn.filter(v, function(f)
+                fn.filter(value, function(f)
                   return not vim.tbl_contains(opts.ensure_installed, f)
                 end)
               )
             end
-          else
-            vim.list_extend(
-              opts.ensure_installed,
-              fn.filter(value, function(f)
-                return not vim.tbl_contains(opts.ensure_installed, f)
-              end)
-            )
           end
         end
       end,

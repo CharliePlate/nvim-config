@@ -27,6 +27,7 @@ return {
   {
     "folke/noice.nvim",
     event = "VeryLazy",
+    dependencies = { "MunifTanjim/nui.nvim" },
     opts = {
       cmdline = {
         enabled = true,
@@ -46,9 +47,6 @@ return {
         inc_rename = true,
         lsp_doc_border = true,
       },
-    },
-    dependencies = {
-      "MunifTanjim/nui.nvim",
     },
   },
   {
@@ -141,16 +139,55 @@ return {
         },
         config = {
           header = icon,
-          -- stylua: ignore
           center = {
-            { action = "Telescope find_files",                                                    desc = " Find file",       icon = " ", key = "f" },
-            { action = "ene | startinsert",                                                       desc = " New file",        icon = " ", key = "n" },
-            { action = "Telescope oldfiles",                                                      desc = " Recent files",    icon = " ", key = "r" },
-            { action = "Telescope live_grep",                                                     desc = " Find text",       icon = " ", key = "g" },
-            { action = "require('telescope.builtin').find_files({cwd=vim.fn.stdpath('config')})", desc = " Config",          icon = " ", key = "c" },
-            { action = 'lua require("persistence").load()',                                       desc = " Restore Session", icon = " ", key = "s" },
-            { action = "Lazy",                                                                    desc = " Lazy",            icon = "󰒲 ", key = "l" },
-            { action = "qa",                                                                      desc = " Quit",            icon = " ", key = "q" },
+            {
+              action = "Telescope find_files",
+              desc = " Find file",
+              icon = " ",
+              key = "f",
+            },
+            {
+              action = "ene | startinsert",
+              desc = " New file",
+              icon = " ",
+              key = "n",
+            },
+            {
+              action = "Telescope oldfiles",
+              desc = " Recent files",
+              icon = " ",
+              key = "r",
+            },
+            {
+              action = "Telescope live_grep",
+              desc = " Find text",
+              icon = " ",
+              key = "g",
+            },
+            {
+              action = "require('telescope.builtin').find_files({cwd=vim.fn.stdpath('config'), file_ignore_patterns={'lua/dev'}})",
+              desc = " Config",
+              icon = " ",
+              key = "c",
+            },
+            {
+              action = 'lua require("persistence").load()',
+              desc = " Restore Session",
+              icon = " ",
+              key = "s",
+            },
+            {
+              action = "Lazy",
+              desc = " Lazy",
+              icon = "󰒲 ",
+              key = "l",
+            },
+            {
+              action = "qa",
+              desc = " Quit",
+              icon = " ",
+              key = "q",
+            },
           },
           footer = function()
             local stats = require("lazy").stats()
@@ -162,7 +199,20 @@ return {
         },
       })
     end,
-    dependencies = { { "nvim-tree/nvim-web-devicons" } },
+    dependencies = {
+      {
+        "nvim-tree/nvim-web-devicons",
+        opts = {
+          override_by_extension = {
+            templ = {
+              icon = "󰅴",
+              color = "#81e043",
+              name = "Templ",
+            },
+          },
+        },
+      },
+    },
   },
   {
     "RRethy/vim-illuminate",

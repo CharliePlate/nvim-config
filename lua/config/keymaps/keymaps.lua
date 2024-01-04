@@ -1,27 +1,28 @@
-local function map(params)
-  local opts = { noremap = true, silent = true }
+local Keys = require("util.keys")
 
-  if type(params[4]) ~= "table" then
-    params[4] = opts
-  else
-    params[4] = vim.tbl_extend("force", params[4], opts)
-  end
+---@type LazyKeysSpec[]
+local scroll_recenter = {
+  { "<c-f>", "<c-f>zz", desc = "Full Page Scroll Down" },
+  { "<c-d>", "<c-d>zz", desc = "Half Page Scroll Down" },
+  { "<c-b>", "<c-b>zz", desc = "Full Page Scroll Up" },
+  { "<c-u>", "<c-u>zz", desc = "Half Page Scroll Up" },
+}
 
-  vim.keymap.set(params[1], params[2], params[3], params[4])
-end
+---@type LazyKeysSpec[]
+local window_nav = {
+  { "<c-h>", "<c-w>h", desc = "Window Left" },
+  { "<c-j>", "<c-w>j", desc = "Window Down" },
+  { "<c-k>", "<c-w>k", desc = "Window Up" },
+  { "<c-l>", "<c-w>l", desc = "Window Right" },
+}
 
-map({ "n", "<esc>", ":noh<cr>" })
-
-map({ "v", "J", ":m '>+1<CR>gv=gv" })
-map({ "v", "K", ":m '<-2<CR>gv=gv" })
-map({ "v", ">", ">gv" })
-map({ "v", "<", "<gv" })
-
--- Recenter after scrolling
-map({ "n", "<c-f>", "<c-f>zz" })
-map({ "n", "<c-d>", "<c-d>zz" })
-map({ "n", "<c-u>", "<c-u>zz" })
-map({ "n", "<c-b>", "<c-b>zz" })
+---@type LazyKeysSpec[]
+local move_code = {
+  { "<", "<gv", mode = "v", desc = "Indent Left" },
+  { ">", ">gv", mode = "v", desc = "Indent Right" },
+  { "J", ":m '>+1<CR>gv=gv", mode = "v", desc = "Move Line Down" },
+  { "K", ":m '<-2<CR>gv=gv", mode = "v", desc = "Move Line Up" },
+}
 
 local diagnostic_goto = function(next, severity)
   local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
@@ -31,15 +32,20 @@ local diagnostic_goto = function(next, severity)
   end
 end
 
-map({ "n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" } })
-map({ "n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" } })
-map({ "n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" } })
-map({ "n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" } })
-map({ "n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" } })
-map({ "n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" } })
-map({ "n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" } })
+local diagnostic = {
+  { "<leader>cd", vim.diagnostic.open_float, desc = "Line Diagnostics" },
+  { "]d", diagnostic_goto(true), desc = "Next Diagnostic" },
+  { "[d", diagnostic_goto(false), desc = "Prev Diagnostic" },
+  { "]e", diagnostic_goto(true, "ERROR"), desc = "Next Error" },
+  { "[e", diagnostic_goto(false, "ERROR"), desc = "Prev Error" },
+  { "]w", diagnostic_goto(true, "WARN"), desc = "Next Warning" },
+  { "[w", diagnostic_goto(false, "WARN"), desc = "Prev Warning" },
+}
 
--- jk to move right quickly
-map({ "i", "jk", "<c-o>a" })
-
-map({ "n", "<leader>lr", ":IncRename " .. vim.fn.expand("<cword>") })
+Keys.addKey({ "<esc>", ":noh<cr>", desc = "Clear Search Highlight" })
+Keys.addKey({ "jk", "<c-o>a", mode = "i", desc = "Move one character right" })
+Keys.addKeys(window_nav)
+Keys.addKeys(scroll_recenter)
+Keys.addKeys(move_code)
+Keys.addKeys(diagnostic)
+Keys.set()

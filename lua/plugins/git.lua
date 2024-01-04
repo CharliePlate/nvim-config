@@ -13,19 +13,24 @@ return {
       on_attach = function(buffer)
         local gs = package.loaded.gitsigns
 
-        local function map(mode, l, r, desc)
-          vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
-        end
+        local Keys = require("util.keys")
+        ---@type LazyKeysSpec[]
+        -- stylua: ignore
+        local maps = {
+          { "]h", gs.next_hunk, buffer = buffer, desc = "Next Hunk" },
+          { "[h", gs.prev_hunk, buffer = buffer, desc = "Prev Hunk" },
+          { "<leader>gs", ":Gitsigns stage_hunk<CR>", buffer = buffer, desc = "Stage Hunk" },
+          { "<leader>gs", ":Gitsigns stage_hunk<CR>", mode = "v", buffer = buffer, desc = "Stage Hunk" },
+          { "<leader>gr", ":Gitsigns reset_hunk<CR>", buffer = buffer, desc = "Reset Hunk" },
+          { "<leader>gr", ":Gitsigns reset_hunk<CR>", mode = "v", buffer = buffer, desc = "Reset Hunk" },
+          { "<leader>gu", gs.undo_stage_hunk, buffer = buffer, desc = "Undo Stage Hunk" },
+          { "<leader>gp", gs.preview_hunk, buffer = buffer, desc = "Preview Hunk" },
+          { "<leader>gl", function() gs.blame_line({ full = true }) end, buffer = buffer, desc = "Blame Line" },
+          { "ih", ":<C-U>Gitsigns select_hunk<CR>", mode = "x", buffer = buffer, desc = "GitSigns Select Hunk" },
+          { "ih", ":<C-U>Gitsigns select_hunk<CR>", mode = "o", buffer = buffer, desc = "GitSigns Select Hunk" },
+        }
 
-      -- stylua: ignore start
-      map("n", "]h", gs.next_hunk, "Next Hunk")
-      map("n", "[h", gs.prev_hunk, "Prev Hunk")
-      map({ "n", "v" }, "<leader>gs", ":Gitsigns stage_hunk<CR>", "Stage Hunk")
-      map({ "n", "v" }, "<leader>gr", ":Gitsigns reset_hunk<CR>", "Reset Hunk")
-      map("n", "<leader>gu", gs.undo_stage_hunk, "Undo Stage Hunk")
-      map("n", "<leader>gp", gs.preview_hunk, "Preview Hunk")
-      map("n", "<leader>gl", function() gs.blame_line({ full = true }) end, "Blame Line")
-      map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
+        Keys.addAndSet(maps)
       end,
     },
   },

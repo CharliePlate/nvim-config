@@ -1,13 +1,4 @@
--- Utility Function to handle
-function On_Attach(on_attach)
-  vim.api.nvim_create_autocmd("LspAttach", {
-    callback = function(args)
-      local buffer = args.buf
-      local client = vim.lsp.get_client_by_id(args.data.client_id)
-      on_attach(client, buffer)
-    end,
-  })
-end
+local fn = require("util.fn")
 
 return {
   {
@@ -22,10 +13,6 @@ return {
       inlayHints = {},
     },
     config = function(_, opts)
-      On_Attach(function(client, buffer)
-        require("config.keymaps.lsp").set_binds(client, buffer)
-      end)
-
       local register_capability = vim.lsp.handlers["client/registerCapability"]
 
       vim.lsp.handlers["client/registerCapability"] = function(err, res, ctx)
@@ -33,7 +20,8 @@ return {
         local client_id = ctx.client_id
         local client = vim.lsp.get_client_by_id(client_id)
         local buffer = vim.api.nvim_get_current_buf()
-        require("config.keymaps.lsp").set_binds(client, buffer)
+        require("config.keymaps.lsp").makeLspKeys(client, buffer)
+
         return ret
       end
 
@@ -42,7 +30,7 @@ return {
         vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
       end
 
-      On_Attach(function(client, buffer)
+      fn.lspOnAttach(function(client, buffer)
         if opts.inlayHints[client.name] then
           if client.supports_method("textDocument/inlayHint") then
             vim.lsp.inlay_hint.enable(buffer, true)
@@ -50,17 +38,28 @@ return {
         end
       end)
 
+      -- Set up keybindings
+      fn.lspOnAttach(function(client, buffer)
+        require("config.keymaps.lsp").makeLspKeys(client, buffer)
+      end)
+
       local mason = require("mason-lspconfig")
 
       mason.setup_handlers({
         function(server_name)
-          require("lspconfig")[server_name].setup({})
+          local server_opts = opts.servers[server_name] or {}
+
+          if opts.servers[server_name] and opts.servers[server_name].setup ~= nil then
+            opts.servers[server_name].setup(server_opts)
+          else
+            require("lspconfig")[server_name].setup(server_opts)
+          end
+
+          if opts.servers[server_name] and opts.servers[server_name].autocmds ~= nil then
+            opts.servers[server_name].autocmds()
+          end
         end,
       })
-
-      for server, server_opts in pairs(opts.servers) do
-        require("lspconfig")[server].setup(server_opts)
-      end
     end,
     keys = {
       { "<leader>li", "<cmd>Mason<cr>", "Mason" },
@@ -108,5 +107,8 @@ return {
     "smjonas/inc-rename.nvim",
     cmd = "IncRename",
     opts = {},
+    keys = {
+      { "<leader>lr", "<cmd>IncRename<cr>", desc = "Incremental Rename" },
+    },
   },
 }

@@ -1,5 +1,12 @@
 return {
   {
+    "JoosepAlviste/nvim-ts-context-commentstring",
+    lazy = true,
+    opts = {
+      enable_autocmd = false,
+    },
+  },
+  {
     "nvim-treesitter/nvim-treesitter-context",
     opts = {
       enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
@@ -25,29 +32,31 @@ return {
       require("nvim-treesitter.query_predicates")
     end,
     dependencies = {
-      "timakro/vim-yadi",
-      "HiPhish/nvim-ts-rainbow2",
-      "windwp/nvim-ts-autotag",
+      { "nvim-treesitter/playground" },
+      { "timakro/vim-yadi" },
+      { "HiPhish/nvim-ts-rainbow2" },
+      { "windwp/nvim-ts-autotag", opts = {
+        filetypes = { "html", "xml", "templ" },
+      } },
       "nvim-treesitter/nvim-treesitter-textobjects",
     },
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
     end,
     opts = {
-      ensure_installed = { "lua" },
+      ensure_installed = {},
       auto_install = true,
       context_commentstring = {
         enable = true,
         enable_autocmd = false,
       },
-      highlight = {
-        enable = true, -- false will disable the whole extension
-        disable = { "css" }, -- list of language that will be disabled
-      },
-      autopairs = {
+      playground = {
         enable = true,
       },
-      autotag = {
+      highlight = {
+        enable = true,
+      },
+      autopairs = {
         enable = true,
       },
       indent = { enable = false, disable = { "python", "css" } },

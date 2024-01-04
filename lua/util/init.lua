@@ -7,4 +7,5 @@ return {
   env = require("util.env"),
   dap = require("util.dap"),
   fn = require("util.fn"),
+  keys = require("util.keys"),
 }

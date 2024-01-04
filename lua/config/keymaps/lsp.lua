@@ -1,3 +1,5 @@
+local fn = require("util.fn")
+
 local M = {}
 
 -- stylua: ignore
@@ -12,14 +14,12 @@ M.keys = {
   { "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action", mode = { "n", "v" }, has = "codeAction" },
 }
 
-M.set_binds = function(_, buffer)
-  local opts = { noremap = true, silent = true }
-  local whichkey = require("which-key")
-  whichkey.register({ ["<leader>c"] = { name = "+coding" } }, { buffer = buffer })
-  for _, key in pairs(M.keys) do
-    vim.keymap.set(key.mode or "n", key[1], key[2], opts)
-    whichkey.register({ [key[1]] = { name = key["desc"] } }, { buffer = buffer })
-  end
+M.makeLspKeys = function(client, buffer)
+  local Keys = require("util.keys")
+  local Opts = fn.opts("nvim-lspconfig")
+  local server_keys = Opts.servers[client.name] and Opts.servers[client.name].keys or {}
+  local keymaps = vim.list_extend(M.keys, server_keys)
+  Keys.addAndSet(keymaps)
 end
 
 return M

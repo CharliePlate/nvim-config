@@ -81,6 +81,7 @@ return {
     event = { "InsertEnter", "CmdLineEnter" },
     opts = function()
       local cmp = require("cmp")
+      local compare = cmp.config.compare
       local defaults = require("cmp.config.default")()
       return {
         snippet = {
@@ -93,11 +94,10 @@ return {
           documentation = cmp.config.window.bordered(),
         },
         sources = cmp.config.sources({
-          { name = "nvim_lsp" },
-          { name = "luasnip" },
-          { name = "async-path" },
-        }, {
-          { name = "buffer" },
+          { name = "nvim_lsp", priority = 1000 },
+          { name = "luasnip", priority = 750 },
+          { name = "async-path", priority = 500 },
+          { name = "buffer", priority = 250 },
         }),
         mapping = cmp.mapping.preset.insert({
           ["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
@@ -133,14 +133,13 @@ return {
             hl_group = "CmpGhostText",
           },
         },
-        sorting = defaults.sorting,
       }
     end,
     config = function(_, opts)
       vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
-      for _, source in ipairs(opts.sources) do
-        source.group_index = source.group_index or 1
-      end
+      -- for _, source in ipairs(opts.sources) do
+      --   source.group_index = source.group_index or 1
+      -- end
       require("cmp").setup(opts)
       local cmp = require("cmp")
       ---@diagnostic disable-next-line: missing-fields

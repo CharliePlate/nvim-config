@@ -1,21 +1,27 @@
+local Event = require("lazy.core.handler.event")
+
 local M = setmetatable({}, {
   __call = function(m)
-    m.lazy_file()
+    m.setup()
   end,
 })
 
 function M.setup()
   M.lazy_file()
+  M.root_loaded()
 end
 
 M.use_lazy_file = true
 M.lazy_file_events = { "BufReadPost", "BufNewFile", "BufWritePre" }
 
+function M.root_loaded()
+  Event.mappings.RootLoaded = { id = "RootLoaded", event = "User", pattern = "RootLoaded" }
+end
+
 function M.lazy_file()
   M.use_lazy_file = M.use_lazy_file and vim.fn.argc(-1) > 0
 
   -- Add support for the LazyFile event
-  local Event = require("lazy.core.handler.event")
 
   if M.use_lazy_file then
     -- We'll handle delayed execution of events ourselves

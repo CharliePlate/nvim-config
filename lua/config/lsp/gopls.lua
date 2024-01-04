@@ -1,3 +1,5 @@
+local fn = require("util.fn")
+
 return {
   settings = {
     gopls = {
@@ -35,4 +37,21 @@ return {
       semanticTokens = true,
     },
   },
+  autocmds = function()
+    fn.lspOnAttach(function(client, _)
+      if client.name == "gopls" then
+        if not client.server_capabilities.semanticTokensProvider then
+          local semantic = client.config.capabilities.textDocument.semanticTokens
+          client.server_capabilities.semanticTokensProvider = {
+            full = true,
+            legend = {
+              tokenTypes = semantic.tokenTypes,
+              tokenModifiers = semantic.tokenModifiers,
+            },
+            range = true,
+          }
+        end
+      end
+    end)
+  end,
 }

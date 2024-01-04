@@ -37,6 +37,8 @@ opt.grepformat = "%f:%l:%c:%m"
 opt.grepprg = "rg --vimgrep"
 opt.conceallevel = 3
 
+opt.swapfile = false
+
 opt.completeopt = { "menuone", "noselect" }
 
 opt.signcolumn = "yes"
@@ -50,4 +52,10 @@ opt.splitright = true -- Put new windows right of current
 
 vim.diagnostic.config({
   float = { border = "rounded" },
+})
+
+vim.filetype.add({
+  extension = {
+    templ = "templ",
+  },
 })

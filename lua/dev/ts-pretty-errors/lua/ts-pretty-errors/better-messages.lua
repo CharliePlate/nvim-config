@@ -96,9 +96,9 @@ M.translate = function(message, error_num)
 
   local params = get_params(parsed["original"])
 
-  if #params == 0 then
-    return "TS" .. error_num .. ": " .. parsed.body
-  end
+  -- if #params == 0 then
+  --   return "TS" .. error_num .. ": " .. parsed.body
+  -- end
 
   local better_error = better_error_message(message, parsed["original"], parsed["better"])
 

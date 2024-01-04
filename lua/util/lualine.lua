@@ -13,27 +13,32 @@ return {
   lualine_a = { "mode" },
   lualine_b = { "branch" },
   lualine_c = {
+    -- {
+    --   function()
+    --     return require("arrow.statusline").text_for_statusline_with_icons()
+    --   end,
+    --   cond = function()
+    --     return require("arrow.statusline").is_on_arrow_file()
+    --   end,
+    -- },
+
     getRelativePath,
   },
   lualine_x = {
-            -- stylua: ignore
-            {
-              function() return require("noice").api.status.command.get() end,
-              cond = function() return package.loaded["noice"] and require("noice").api.status.command.has() end,
-            },
-            -- stylua: ignore
-            {
-              function() return require("noice").api.status.mode.get() end,
-              cond = function() return package.loaded["noice"] and require("noice").api.status.mode.has() end,
-            },
-            -- stylua: ignore
-            {
-              function() return "  " .. require("dap").status() end,
-              cond = function () return package.loaded["dap"] and require("dap").status() ~= "" end,
-            },
+    -- stylua: ignore
     {
-      require("lazy.status").updates,
-      cond = require("lazy.status").has_updates,
+      function() return require("noice").api.status.command.get() end,
+      cond = function() return package.loaded["noice"] and require("noice").api.status.command.has() end,
+    },
+    -- stylua: ignore
+    {
+      function() return require("noice").api.status.mode.get() end,
+      cond = function() return package.loaded["noice"] and require("noice").api.status.mode.has() end,
+    },
+    -- stylua: ignore
+    {
+      function() return "  " .. require("dap").status() end,
+      cond = function () return package.loaded["dap"] and require("dap").status() ~= "" end,
     },
     {
       "diff",

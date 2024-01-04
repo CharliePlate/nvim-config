@@ -5,9 +5,23 @@ return {
     "windwp/nvim-autopairs",
     event = "InsertEnter",
     opts = {},
+    config = function(_, opts)
+      local Cond = require("nvim-autopairs.conds")
+      local Rule = require("nvim-autopairs.rule")
+      local npairs = require("nvim-autopairs")
+
+      npairs.setup(opts)
+
+      npairs.add_rule(Rule(">[%w%s]*$", "^%s*</", {
+        "templ",
+      }):only_cr():use_regex(true))
+
+      npairs.add_rule(Rule("<!--", "-->", "templ"):with_cr(Cond.none()))
+    end,
   },
   {
     "echasnovski/mini.files",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
     version = "*",
     opts = {
       mappings = {
@@ -42,6 +56,13 @@ return {
       end
 
       vim.api.nvim_create_autocmd("User", {
+        pattern = "MiniFilesWindowUpdate",
+        callback = function(args)
+          vim.wo[args.data.win_id].relativenumber = true
+        end,
+      })
+
+      vim.api.nvim_create_autocmd("User", {
         pattern = "MiniFilesBufferCreate",
         callback = function(args)
           local buf_id = args.data.buf_id
@@ -52,7 +73,23 @@ return {
       vim.api.nvim_create_autocmd("User", {
         pattern = "MiniFilesActionRename",
         callback = function(event)
-          require("lazyvim.util").lsp.on_rename(event.data.from, event.data.to)
+          local clients = vim.lsp.get_clients()
+          for _, client in ipairs(clients) do
+            if client.supports_method("workspace/willRenameFiles") then
+              ---@diagnostic disable-next-line: invisible
+              local resp = client.request_sync("workspace/willRenameFiles", {
+                files = {
+                  {
+                    oldUri = vim.uri_from_fname(event.data.from),
+                    newUri = vim.uri_from_fname(event.data.to),
+                  },
+                },
+              }, 1000, 0)
+              if resp and resp.result ~= nil then
+                vim.lsp.util.apply_workspace_edit(resp.result, client.offset_encoding)
+              end
+            end
+          end
         end,
       })
     end,
@@ -143,54 +180,52 @@ return {
       local wk = require("which-key")
       wk.setup(opts.config)
       wk.register(opts.keys)
+    end,
+  },
+  {
+    "otavioschwanck/arrow.nvim",
+    event = "RootLoaded",
+    opts = {
+      show_icons = true,
+      leader_key = "<c-_>",
+    },
+    config = function(_, opts)
+      require("arrow").setup(opts)
 
-      vim.api.nvim_del_keymap("n", "<C-k>")
+      local Keys = require("util.keys")
+      --stylua: ignore
+      Keys.addKey({
+        "<leader>a", function() require("arrow.persist").save(require("arrow.utils").get_path_for("%")) end,
+        desc = "Arrow Action",
+      })
+      Keys.set()
     end,
   },
   {
-    "theprimeagen/harpoon",
-    branch = "harpoon2",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      require("harpoon"):setup({})
-    end,
-    -- stylua: ignore
-		keys = {
-			{ "<leader>a", function() require("harpoon"):list():append() end, desc = "Harpoon File" },
-			{ "<c-e>", function() local harpoon = require("harpoon") harpoon.ui:toggle_quick_menu(harpoon:list()) end, desc = "Quick Menu" },
-			{ "<c-h>", function() require("harpoon"):list():select(1) end, desc = "harpoon to file 1" },
-			{ "<c-j>", function() require("harpoon"):list():select(2) end, desc = "harpoon to file 2" },
-			{ "<c-k>", function() require("harpoon"):list():select(3) end, desc = "harpoon to file 3" },
-			{ "<c-l>", function() require("harpoon"):list():select(4) end, desc = "harpoon to file 4" },
-		},
-  },
-  {
-    {
-      "akinsho/toggleterm.nvim",
-      version = "*",
-      keys = {
-        { [[<c-\>]], "<cmd>ToggleTerm<cr>", desc = "ToggleTerm" },
-      },
-      opts = {
-        size = 20,
-        open_mapping = [[<c-\>]],
-        hide_numbers = true,
-        shade_filetypes = {},
-        shade_terminals = true,
-        shading_factor = 2,
-        start_in_insert = true,
-        insert_mappings = true,
-        persist_size = true,
-        direction = "float",
-        close_on_exit = true,
-        shell = vim.o.shell,
-        float_opts = {
-          border = "curved",
-          winblend = 0,
-          highlights = {
-            border = "Normal",
-            background = "Normal",
-          },
+    "akinsho/toggleterm.nvim",
+    version = "*",
+    keys = {
+      { [[<c-\>]], "<cmd>ToggleTerm<cr>", desc = "ToggleTerm" },
+    },
+    opts = {
+      size = 20,
+      open_mapping = [[<c-\>]],
+      hide_numbers = true,
+      shade_filetypes = {},
+      shade_terminals = true,
+      shading_factor = 2,
+      start_in_insert = true,
+      insert_mappings = true,
+      persist_size = true,
+      direction = "float",
+      close_on_exit = true,
+      shell = vim.o.shell,
+      float_opts = {
+        border = "curved",
+        winblend = 0,
+        highlights = {
+          border = "Normal",
+          background = "Normal",
         },
       },
     },
@@ -254,5 +289,10 @@ return {
         end,
       },
     },
+  },
+  {
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    opts = {},
   },
 }
