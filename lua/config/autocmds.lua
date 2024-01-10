@@ -32,6 +32,7 @@ local set_root = function()
 end
 
 local group = vim.api.nvim_create_augroup("GlobalConfig", { clear = true })
+
 -- Setup basic util stuff
 vim.api.nvim_create_autocmd("User", {
   group = group,
@@ -40,6 +41,7 @@ vim.api.nvim_create_autocmd("User", {
     Util.setup()
   end,
 })
+
 -- On buffer enter, set the pwd
 vim.api.nvim_create_autocmd("BufEnter", {
   group = group,
@@ -48,6 +50,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
     vim.api.nvim_exec_autocmds("User", { pattern = "RootLoaded" })
   end,
 })
+
 -- When reading or creating a new file, set that buffer eol to true
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   group = group,

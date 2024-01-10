@@ -155,8 +155,11 @@ return {
         ["<leader>g"] = { name = "+git" },
         ["<leader>f"] = { name = "+find" },
         ["<leader>q"] = { name = "+session" },
-        ["<leader>d"] = { name = "debug", ["t"] = { name = "test" } },
-        ["<leader>l"] = { name = "lsp" },
+        ["<leader>d"] = { name = "+debug", ["t"] = { name = "test" } },
+        ["<leader>l"] = { name = "+lsp" },
+        ["<leader>x"] = { name = "+diagnostic" },
+        ["<leader>c"] = { name = "+coding" },
+        ["<leader>t"] = { name = "+test" },
       },
 
       config = {
@@ -193,12 +196,15 @@ return {
       require("arrow").setup(opts)
 
       local Keys = require("util.keys")
-      --stylua: ignore
-      Keys.addKey({
-        "<leader>a", function() require("arrow.persist").save(require("arrow.utils").get_path_for("%")) end,
-        desc = "Arrow Action",
-      })
-      Keys.set()
+      -- stylua: ignore
+      ---@type LazyKeysSpec[]
+      local maps = {
+        { "<leader>a", function() require("arrow.persist").save(require("arrow.utils").get_path_for("%")) end, desc = "Arrow Action" },
+        { "<c-n>", function() require("arrow.persist").next() end, desc = "Next Arrow" },
+        { "<c-p>", function() require("arrow.persist").previous() end, desc = "Previous Arrow"},
+      }
+
+      Keys.addAndSet(maps)
     end,
   },
   {

@@ -73,7 +73,7 @@ return {
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
-      "FelipeLema/cmp-async-path",
+      "hrsh7th/cmp-path",
       "hrsh7th/cmp-cmdline",
       "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip",
@@ -81,8 +81,6 @@ return {
     event = { "InsertEnter", "CmdLineEnter" },
     opts = function()
       local cmp = require("cmp")
-      local compare = cmp.config.compare
-      local defaults = require("cmp.config.default")()
       return {
         snippet = {
           expand = function(args)
@@ -96,7 +94,7 @@ return {
         sources = cmp.config.sources({
           { name = "nvim_lsp", priority = 1000 },
           { name = "luasnip", priority = 750 },
-          { name = "async-path", priority = 500 },
+          { name = "path", priority = 500 },
           { name = "buffer", priority = 250 },
         }),
         mapping = cmp.mapping.preset.insert({
@@ -137,9 +135,6 @@ return {
     end,
     config = function(_, opts)
       vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
-      -- for _, source in ipairs(opts.sources) do
-      --   source.group_index = source.group_index or 1
-      -- end
       require("cmp").setup(opts)
       local cmp = require("cmp")
       ---@diagnostic disable-next-line: missing-fields
@@ -159,5 +154,17 @@ return {
         }),
       })
     end,
+  },
+  {
+    "folke/trouble.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = {},
+    keys = {
+      { "<leader>xx", "<cmd>TroubleToggle<cr>", desc = "Trouble Toggle" },
+      { "<leader>xw", "<cmd>TroubleToggle lsp_workspace_diagnostics<cr>", desc = "Trouble Workspace" },
+      { "<leader>xd", "<cmd>TroubleToggle lsp_document_diagnostics<cr>", desc = "Trouble Document" },
+      { "<leader>xl", "<cmd>TroubleToggle loclist<cr>", desc = "Trouble Loclist" },
+      { "<leader>xq", "<cmd>TroubleToggle quickfix<cr>", desc = "Trouble Quickfix" },
+    },
   },
 }

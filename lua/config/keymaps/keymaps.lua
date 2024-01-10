@@ -44,6 +44,7 @@ local diagnostic = {
 
 Keys.addKey({ "<esc>", ":noh<cr>", desc = "Clear Search Highlight" })
 Keys.addKey({ "jk", "<c-o>a", mode = "i", desc = "Move one character right" })
+Keys.addKey({ "<leader>lr", ":IncRename ", desc = "Incremental Rename" })
 Keys.addKeys(window_nav)
 Keys.addKeys(scroll_recenter)
 Keys.addKeys(move_code)

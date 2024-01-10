@@ -105,10 +105,9 @@ return {
   },
   {
     "smjonas/inc-rename.nvim",
-    cmd = "IncRename",
-    opts = {},
-    keys = {
-      { "<leader>lr", "<cmd>IncRename<cr>", desc = "Incremental Rename" },
+    dependencies = { "stevearc/dressing.nvim" },
+    opts = {
+      input_buffer_type = "dressing",
     },
   },
 }

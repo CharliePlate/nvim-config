@@ -33,7 +33,17 @@ return {
         enabled = true,
         view = "cmdline",
       },
+      messages = {
+        enabled = true,
+        view = "notify",
+      },
+      notify = {
+        enabled = true,
+      },
       lsp = {
+        progress = {
+          enabled = false,
+        },
         override = {
           ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
           ["vim.lsp.util.stylize_markdown"] = true,
@@ -44,7 +54,7 @@ return {
         bottom_search = true,
         command_palette = false,
         long_message_to_split = true,
-        inc_rename = true,
+        inc_rename = false,
         lsp_doc_border = true,
       },
     },
@@ -230,5 +240,13 @@ return {
   {
     "m-demare/hlargs.nvim",
     opts = {},
+  },
+  {
+    "echasnovski/mini.notify",
+    dependencies = { "folke/noice.nvim" },
+    config = function()
+      require("mini.notify").setup()
+      vim.notify = require("mini.notify").make_notify()
+    end,
   },
 }
